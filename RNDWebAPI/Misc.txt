@@ -1,0 +1,10 @@
+﻿ data-editable='{ "mode": "popup","template": kendo.template($("#popup_editor").html()) }' 
+ data-row-template="rowTemplate"
+ data-editable='{ "mode": "inline"}' 
+ data-toolbar="['create', 'save']"
+  {"command": [ "edit", "destroy" ], "filterable": false, "sortable": false, "width:": "240px"},
+  {'command':[{'text':'Edit Application','name':'Edit-App'}],'title':'','width':'50px'}  
+  <a class="k-button k-button-icontext k-grid-edit" href="javascript:void(0)" ><span class="k-icon k-edit"></span>Edit T</a>
+
+  data-editable='{ "mode": "popup","template": kendo.template($("#popup_editor").html()) }' 
+  data-row-template="rowTemplate"

@@ -1,0 +1,57 @@
+﻿<script type="text/x-kendo-template" id="gridviewTemplate">
+       <div id="example">
+            <div class="demo-section k-header">
+                <div class="box-col">
+                    <h4>Add or update a record</h4>
+                    <div
+                        data-role="grid"
+                        date-scrollable="true"                       
+                         data-editable='{ "mode": "popup","template": kendo.template($("#popup_editor").html()) }' 
+                         data-toolbar="['create', 'save']"
+                        data-columns="[
+                                         { 'field': 'ProductName', 'width': 270 },
+                                         { 'field': 'UnitPrice' },
+                                         {'command':['edit','destroy'],'title':'Alter'},
+                                      ]"
+                         data-row-template="rowTemplate"
+                         data-bind="source: products,
+                                events: {
+                                    save: onSave
+                                }"
+                        style="width: 700px; height: 700px">
+                    </div>
+                </div>
+            </div>
+        </div>
+</script>
+
+<script id="rowTemplate" type="text/x-kendo-tmpl">
+<tr data-uid="#: uid #" role="row">
+    <td role="gridcell">
+        <span>#:ProductName #</span> 
+    </td>
+    <td role="gridcell">
+        <span>#:UnitPrice #</span>
+    </td>
+    <td role="gridcell">
+        <a class="k-button k-button-icontext k-grid-edit" href="javascript:void(0)" ><span class="k-icon k-edit"></span>Edit T</a>
+        <a class="k-button k-button-icontext k-grid-delete" ><span class="k-icon k-delete"></span>Delete T</a>
+    </td>
+</tr>
+    
+</script>
+
+
+<script id="popup_editor" type="text/x-kendo-tmpl">
+    <h1>Product</h1> 
+    <table>
+    <tr>
+        <th>Name:</th>
+        <td>
+            <input type="text" data-bind="ProductName"/>
+        </td>
+    </tr>
+</table>
+</script>
+
+

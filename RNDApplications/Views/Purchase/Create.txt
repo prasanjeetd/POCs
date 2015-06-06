@@ -1,0 +1,321 @@
+@model RNDApplications.Models.New_Models.PurchaseViewModel
+
+@{
+    ViewBag.Title = "Purchase";
+}
+@*<input id="btnGetPersons" type="button" value="Get Persons" />*@
+<div>
+    <div id="ajaxDiv">
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+
+        //FUNCTIONS
+
+        function GetAddress(customerID) {
+            try {
+
+                $.getJSON("/Purchase/GetAddress",
+                    { 'customerID': customerID },
+                    function (data) {
+                        $("#Address").val(data.Address);
+                        $("#PartyImage").css("display", "none");
+                    }).error(function () {
+                        alert("error");
+                    });
+            }
+            catch (ex) {
+                alert(ex);
+            }
+        }
+
+        function GetContact(customerID) {
+            var URL = "/Purchase/GetContacts/" + customerID;
+            if (customerID != null && customerID != "") {
+                //$("#PartyImage").removeAttr("style");
+                $("#PartyImage").css("display", '');
+                $.get(URL, function (data) {
+                    $("#Contact").val(data);
+                    GetAddress(customerID);
+                })
+                    .error(function () {
+                        alert("error");
+                    });
+
+            }
+            else {
+                $("#Contact").val(null);
+                $("#Address").val(null);
+            }
+        }
+
+        function CalculateTotal(rate,qty,total) {
+            var rate = $(rate).val();
+            var qty = $(qty).val();
+            var totalRate = (rate == null ? 1 : rate) * (qty == null ? 1 : qty);
+            //alert("rate " + rate + " qty " + qty + " total" + totalRate);
+            $(total).html(totalRate.toFixed(2).toString());
+        }
+
+
+        function GetProductRate(productID,rate,qty,total) {
+            $.getJSON('@Url.Action("GetProductRate", "Purchase")',
+               { 'productID': productID },
+               function (data) {
+                   $(rate).val(data.Rate);
+                   CalculateTotal(rate,qty,total);
+               })
+               .error(function () {
+                   alert("error");
+               });
+        }
+
+        //EVENTS
+        $(document).ready(function () {
+
+           
+
+            $(".CustomerID").change(function () {
+                //alert("Name: " + $(this + "option:selected").text() + "-- Value: " + $(this).val());
+                GetContact($(this).val());
+            });
+
+            $("select").on("change", function (event) {
+                var target = event.target;
+                var targetID = target.id.toString();
+
+                if (targetID === "ProductID");
+                {
+
+                    var selector = "." + target.id.toString();
+                    var productID = $(selector).val();
+                    if (productID != null && productID != "") {
+                        GetProductRate(productID, "#Rate","#Qty","#Total");
+                }
+                else {
+                        //$("#Rate").val(null);
+                        //$("#Qty").val(null);
+                        //$("#Total").html('0.00');
+                }
+            }
+            });
+        });
+
+   
+
+    $(".Rate").on("keyup change", function (event) {
+        CalculateTotal("#Rate","#Qty","#Total");
+    });
+
+
+    $("#PurchaseDetailsTable").on("change keyup", "select,input:text", function (event) {
+        event.preventDefault();
+        var target = event.target;
+
+        switch (target.tagName.toLowerCase()) {
+            case 'select':
+                //alert("Select Value Changed");
+                //alert($(this).val());
+                //alert($(this).closest("tr").find(".TableRate").val());
+                //alert("Total =" + $(this).closest("tr").find(".TableTotal").html());
+                //$(this).parent().parent().find(".TableQty").val($(this).val());
+
+
+                var productID = $(this).val();
+                var rate = $(this).closest("tr").find(".TableRate");
+                var qty = $(this).parent().parent().find(".TableQty");
+                var total = $(this).closest("tr").find(".TableTotal");
+
+                GetProductRate(productID, rate,qty,total);
+
+                break;
+            case 'input':
+                //alert("Text Value Changed");
+                //alert($(this).val());
+                //alert("Total =" + $(this).closest("tr").find(".TableTotal").html());
+
+
+                var rate = $(this).closest("tr").find(".TableRate");
+                var qty = $(this).parent().parent().find(".TableQty");
+                var total = $(this).closest("tr").find(".TableTotal");
+
+                CalculateTotal(rate, qty, total);
+                
+                break;
+        }
+
+    });
+
+    </script>
+    
+    
+    
+    @*  JQUERY LOOPING EXAMPLE  *@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnGetPersons').click(function () {
+                $.getJSON("/Purchase/GetJsonData", null, function (data) {
+                    var div = $('#ajaxDiv');
+                    div.html("<br/> " + "Persons received from server: " + "<br/>");
+                    $.each(data, function (i, item) {
+                        printPerson(div, item);
+                    });
+                });
+            });
+        });
+
+        function printPerson(div, item) {
+            div.append("<br/>" + "FName: " + item.FirstName + ", LName: " + item.LastName);
+            $.each(item.Addresses, function (i, addr) {
+                printAddress(div, addr);
+            });
+        }
+
+        function printAddress(div, item) {
+            div.append("<br/>" + "   " + "Line1: " + item.Line1);
+        }
+
+
+    </script>
+
+}
+
+@using (Html.BeginForm())
+{
+    
+    <fieldset>
+        <legend>Purchase
+        </legend>
+        <table>
+
+            <tr>
+                <th>Purchase Date</th>
+                <th>Invoice Number</th>
+            </tr>
+            <tr>
+
+                @*<td>@Html.TextBox("PurchaseDate",String.Format("{0:d}", Model.purchase.PurchaseDate.ToString()) ,new {@class="datefield",type="date"} )</td>*@
+                <td>@Html.TextBox("PDate")
+                    @Html.HiddenFor(item => item.purchase.PurchaseID)
+                </td>
+                <td>@Html.TextBoxFor(model => model.purchase.InvoiceNo, new { @readonly = "readonly" })</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <th>Contact</th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(item => item.purchase.CustomerID, Model.customers, "--Select Customer--", new { @class = "CustomerID" })
+                    <img src="~/Images/Project Images/Processing.gif" height="30" width="30" id="PartyImage" style="display: none;" />
+                </td>
+                <td>
+                    @Html.TextBoxFor(item => item.purchase.Contact, new { id = "Contact" })
+
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.ValidationMessageFor(item => item.purchase.CustomerID)</td>
+                <td>@Html.ValidationMessageFor(item => item.purchase.Contact)</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>@Html.TextAreaFor(item => item.purchase.Address, new { id = "Address" })</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th style="width:100px;">Product</th>
+                <th>Rate</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>@Html.DropDownListFor(item => item.purchaseDetail.ProductID, Model.products, "---Select Product---", new { @id = "ProductID", @class = "ProductID" })</td>
+                <td>@Html.TextBoxFor(item => item.purchaseDetail.Rate, new { id = "Rate", @class = "Rate" })</td>
+                <td>@Html.TextBoxFor(item => item.purchaseDetail.Qty, new { id = "Qty", @class = "Rate" })</td>
+                <td>@Html.Label("0", new { @id = "Total" })</td>
+                <td>
+                    <input type="submit" name="Command" value="Add" /></td>
+            </tr>
+             @if (Model.purchaseDetailList != null)
+             {
+                 for (int i = 0; i < Model.purchaseDetailList.Count; i++)
+                 {
+                    <tr>
+                        <td>
+                            @*@Model.products.ToList()[i].Text*@
+                            @*@Html.HiddenFor(item=> item.purchaseDetailList[i].ProductID)*@
+                            @Html.DropDownListFor(item => item.purchaseDetailList[i].ProductID, //new SelectList(Model.products.Items,"ProductID", "ProductName"))
+                             new SelectList(Model.products.Items, Model.products.DataValueField.ToString(), Model.products.DataTextField.ToString(),
+                             Model.purchaseDetailList[i].ProductID))
+                           
+                            @Html.HiddenFor(item => item.purchaseDetailList[i].PurchaseDetailID)
+                        </td>
+                        <td>@Html.TextBoxFor(item => item.purchaseDetailList[i].Rate, new { @class = "TableRate" })</td>
+                        <td>@Html.TextBoxFor(item => item.purchaseDetailList[i].Qty, new { @class = "TableQty" })</td>
+                        <td class="TableTotal">@(Model.purchaseDetailList[i].Rate * Model.purchaseDetailList[i].Qty)</td>
+                        <td></td>
+                    </tr>
+                 }
+                 <tr>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                     <td> <input type="submit" name="Command" value="Submit" /></td>
+                     <td></td>
+                 </tr>
+             }
+        </table>
+        @if (Model.purchaseDetailList != null)
+        {
+            <table id="PurchaseDetailsTable">
+                <tr>
+                    <th style="width:100px;">Product</th>
+                    <th>Rate</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+                @* @foreach (var item in Model.purchaseDetailList)
+                {
+                    <tr>
+                        <td>@Model.products.Where(p=> p.Value ==  item.ProductID.ToString()).Select(p=>p.Text).SingleOrDefault() </td>
+                        <td> @item.Rate </td>
+                        <td>@item.Qty </td>
+                        <td>@(item.Rate*item.Qty)</td>
+                        <td></td>
+                    </tr>
+                }*@
+
+                @for (int i = 0; i < Model.purchaseDetailList.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @*@Model.products.ToList()[i].Text*@
+                            @*@Html.HiddenFor(item=> item.purchaseDetailList[i].ProductID)*@
+                            @Html.DropDownListFor(item => item.purchaseDetailList[i].ProductID, //new SelectList(Model.products.Items,"ProductID", "ProductName"))
+                             new SelectList(Model.products.Items, Model.products.DataValueField.ToString(), Model.products.DataTextField.ToString(),
+                             Model.purchaseDetailList[i].ProductID))
+                           
+                            @Html.HiddenFor(item => item.purchaseDetailList[i].PurchaseDetailID)
+                        </td>
+                        <td>@Html.TextBoxFor(item => item.purchaseDetailList[i].Rate, new { @class = "TableRate" })</td>
+                        <td>@Html.TextBoxFor(item => item.purchaseDetailList[i].Qty, new { @class = "TableQty" })</td>
+                        <td class="TableTotal">@(Model.purchaseDetailList[i].Rate * Model.purchaseDetailList[i].Qty)</td>
+                    </tr>
+                }
+            </table>
+        }
+        <input type="submit" name="Command" value="Submit" />
+    </fieldset>
+    
+    
+}
+
+@Scripts.Render("~/bundles/jqueryui")

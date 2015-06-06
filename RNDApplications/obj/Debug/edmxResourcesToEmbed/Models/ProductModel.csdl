@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RNDDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="RNDDBEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="ProductMasts" EntityType="RNDDBModel.ProductMast" />
+    <EntitySet Name="CategoryMasts" EntityType="RNDDBModel.CategoryMast" />
+    <AssociationSet Name="FK_ProductMast_CategoryMast" Association="RNDDBModel.FK_ProductMast_CategoryMast">
+      <End Role="CategoryMast" EntitySet="CategoryMasts" />
+      <End Role="ProductMast" EntitySet="ProductMasts" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ProductMast">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="ProductCode" Type="Binary" MaxLength="50" FixedLength="false" />
+    <Property Name="CategoryID" Type="Int64" />
+    <NavigationProperty Name="CategoryMast" Relationship="RNDDBModel.FK_ProductMast_CategoryMast" FromRole="ProductMast" ToRole="CategoryMast" />
+    <Property Type="Decimal" Name="Rate" Precision="18" Scale="2" />
+    <Property Type="Binary" Name="ProductImage" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="CategoryMast">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Type="Int64" Name="CategoryID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="CategoryName" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ProductMasts" Relationship="RNDDBModel.FK_ProductMast_CategoryMast" FromRole="CategoryMast" ToRole="ProductMast" />
+  </EntityType>
+  <Association Name="FK_ProductMast_CategoryMast">
+    <End Type="RNDDBModel.CategoryMast" Role="CategoryMast" Multiplicity="0..1" />
+    <End Type="RNDDBModel.ProductMast" Role="ProductMast" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CategoryMast">
+        <PropertyRef Name="CategoryID" />
+      </Principal>
+      <Dependent Role="ProductMast">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

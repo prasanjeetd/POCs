@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@*@Html.Partial("PageHeading")*@
+
+@section kendoScripts
+{
+    @Scripts.Render("~/Scripts/KendoComponents/Models/ProductModel.js")
+    @Scripts.Render("~/Scripts/KendoComponents/Datasources/ProductDataSource.js")
+    @Scripts.Render("~/Scripts/KendoComponents/ViewModels/GridviewViewModel.js")
+}
+
+<h2>Kendo UI</h2>
+
+<!-- Example row of columns -->
+<div class="row">
+    <div class="col-lg-4">
+        <h2></h2>
+        <p class="text-danger"></p>
+        <p></p>
+
+        <div id="container"></div>
+        <script>
+            //Load the template definition from an external file
+            templateLoader.loadExtTemplate("/Scripts/KendoComponents/Views/Gridview.tmpl.html");
+
+            $(document).bind("TEMPLATE_LOADED", function (e, path) {
+                //console.log('Templates loaded');
+
+                var index = new kendo.View('gridviewTemplate', { model: GridviewViewModel.viewModel });
+                index.render("#container");
+            });
+        </script>
+        @*<p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>*@
+    </div>
+    <div class="col-lg-4">
+        <h2></h2>
+        <p></p>
+        @*<p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>*@
+    </div>
+    <div class="col-lg-4">
+        <h2></h2>
+        <p></p>
+        <p>@*<a class="btn btn-primary" href="#" role="button">View details &raquo;</a>*@</p>
+    </div>
+</div>
+

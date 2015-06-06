@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RNDDBModel1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="RNDDBModel1StoreContainer">
+    <EntitySet Name="CategoryMast" EntityType="RNDDBModel1.Store.CategoryMast" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductMast" EntityType="RNDDBModel1.Store.ProductMast" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_ProductMast_CategoryMast" Association="RNDDBModel1.Store.FK_ProductMast_CategoryMast">
+      <End Role="CategoryMast" EntitySet="CategoryMast" />
+      <End Role="ProductMast" EntitySet="ProductMast" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="CategoryMast">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="CategoryID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ProductMast">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProductCode" Type="varbinary" MaxLength="50" />
+    <Property Name="CategoryID" Type="bigint" />
+    <Property Name="Rate" Type="numeric" Scale="2" />
+    <Property Name="ProductImage" Type="image" />
+  </EntityType>
+  <Association Name="FK_ProductMast_CategoryMast">
+    <End Role="CategoryMast" Type="RNDDBModel1.Store.CategoryMast" Multiplicity="0..1" />
+    <End Role="ProductMast" Type="RNDDBModel1.Store.ProductMast" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CategoryMast">
+        <PropertyRef Name="CategoryID" />
+      </Principal>
+      <Dependent Role="ProductMast">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

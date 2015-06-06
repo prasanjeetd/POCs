@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="Content/Site.css" rel="stylesheet" />
+    <script src="Scripts/jquery-1.8.2.js"></script>
+
+    <script>
+
+        function getProducts() {
+
+            $.ajax({
+                url: 'api/Product',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+
+                    displayProducts(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+        function saveProducts() {
+
+            var productId = $("#productId").val();
+            var productName = $("#productName").val();
+            var mrp = $("#mrp").val();
+            var expireyDate = $("#date").val();
+
+            var product = { ProductId: productId, ProductName: productName, MRP: mrp, ExpireyDate: expireyDate };
+
+            $.ajax({
+                url: 'api/Product',
+                type: 'POST',
+                data: JSON.stringify(product),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    var productsTable = $("#productsTable")
+                    appendProduct(productsTable, data);
+
+                    clearProducts()
+                    //displayProducts(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+        function clearProducts() {
+            $("#productId").val(null);
+            $("#productName").val("");
+            $("#mrp").val("");
+            $("#date").val(null);
+            $("#productName").focus();
+        }
+
+        function appendProduct(productsTable, product) {
+
+            var productId = "<td>" + product.ProductId + "</td>"
+            var productName = "<td>" + product.ProductName + "</td>"
+            var mrp = "<td>" + product.MRP + "</td>"
+            var expireyDate = "<td>" + product.ExpireyDate + "</td>"
+
+            var row = "<tr>" + productId + productName + mrp + expireyDate + "</tr>";
+
+            productsTable.append(row);
+        }
+
+        function displayProducts(products) {
+
+            var productsTable = $("#productsTable")
+
+            $.each(products, function (index, product) {
+
+                appendProduct(productsTable, product);
+
+            });
+
+        }
+
+        $(document).ready(function () {
+            getProducts();
+
+            $("#save").click(function () {
+                saveProducts();
+            });
+
+            clearProducts();
+        });
+
+
+    </script>
+</head>
+<body>
+
+    <div class="content-wrapper">
+        <h1>Products</h1>
+        <table id="productEntryTable">
+            <tr style="display: none;">
+                <th></th>
+                <td>
+                    <input type="hidden" name="productId" id="productId" /></td>
+            </tr>
+            <tr>
+                <th>Product Name</th>
+                <td>
+                    <input type="text" name="productName" id="productName" /></td>
+            </tr>
+            <tr>
+                <th>MRP</th>
+                <td>
+                    <input type="number" name="mrp" id="mrp" /></td>
+            </tr>
+            <tr>
+                <th>Expirey Date</th>
+                <td>
+                    <input type="date" name="date" id="date" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" name="add" id="save">Save</button>
+                </td>
+                <td>
+                    <button type="reset" name="clear">Clear</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="content-wrapper">
+
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>MRP</th>
+                    <th>Expirey Date</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+</body>
+</html>

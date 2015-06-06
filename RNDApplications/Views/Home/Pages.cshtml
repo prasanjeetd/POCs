@@ -1,0 +1,18 @@
+﻿@model RNDApplications.ServiceReference1.CompositeType
+@{
+    ViewBag.Title = "Pages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.PageTitle  Page</h2>
+
+@if (!Model.BoolValue)
+{
+    <h1 style="color: red">This is your @Model.StringValue Page</h1>
+    <p>Pass parameter pageName with value in url to get your custom page</p>
+}
+else
+{
+    <h1 style="color: green">Congratulations!! You are looking now to your custom page</h1>
+    <h1>This is @Model.StringValue page </h1>
+}

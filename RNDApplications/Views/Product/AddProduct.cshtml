@@ -1,0 +1,26 @@
+﻿@model RNDApplications.Models.ProductMast
+@{
+    ViewBag.Title = "AddProduct";
+}
+
+<h2>AddProduct</h2>
+
+@using (Html.BeginForm("AddProduct", "Product", FormMethod.Post, new { enctype="multipart/form-data"}))
+{
+    <table>
+        <tr>
+            <th>Category</th>
+            <td>
+                @Html.DropDownList("Category")
+
+            </td>
+        </tr>
+       
+        <tr>
+            <th>@Html.Label("Product Name")</th>
+           @*<td>@Html.TextBox("ProductName1",Model.ProductName)</td>*@
+            <td>@Html.TextBoxFor(model => model.ProductName)</td>
+        </tr>
+    </table>
+     <input type="submit" value="Submit" />
+}

@@ -1,0 +1,55 @@
+﻿@model RNDApplications.Models.ProductViewModel
+@{
+    ViewBag.Title = "AddProductFromViewModel";
+}
+
+<h2>AddProductFromViewModel</h2>
+
+@using (Html.BeginForm("AddProductFromViewModel", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.DropDownList("product.CategoryID", Model.Category)
+@*@Html.DropDownList("Category")*@
+    @Html.Label("Product Name")
+    @Html.TextBoxFor(model => model.Product.ProductName)
+    <table>
+        <tr>
+            <th>
+                <label for="productImage">Upload</label></th>
+            <td>
+                <input type="file" name="productImage" multiple="multiple" /></td>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(item => item.Product.Rate)</th>
+            <td>@Html.EditorFor(item => item.Product.Rate)</td>
+        </tr>
+    </table>
+    <input type="submit" value="submit" />
+}
+
+@if (Model.productList != null)
+{
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Product</th>
+            <th>Image</th>
+            <th>Rate</th>
+        </tr>
+        @foreach (var item in Model.productList)
+        {
+            <tr>
+                <td>
+                    @(Model.Category.Where(c => c.Value == item.CategoryID.ToString()).Select(c => c.Text).FirstOrDefault())
+                </td>
+                <td>@item.ProductName</td>
+                @if (item.ProductImage != null)
+                {
+                    <td> <img src='@Url.Action("GetPhoto", "Product", new {productID=item.ProductID })' height="50" width="50" /></td>
+                }
+                else
+                {<td></td>}
+                <td>@item.Rate</td>
+            </tr>
+        }
+    </table>
+}

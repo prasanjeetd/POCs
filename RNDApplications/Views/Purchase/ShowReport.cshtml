@@ -1,0 +1,15 @@
+﻿@model RNDApplications.Models.New_Models.PurchaseMaster
+@{
+    ViewBag.Title = "ShowReport";
+}
+
+<h2>ShowReport</h2>
+
+@Html.DisplayNameFor(item => item.InvoiceNo)
+@Html.DisplayFor(item => item.InvoiceNo)
+<img src='@Url.Action("DisplayReport", "Purchase", new {purchaseID=Model.PurchaseID })' />
+@Html.ActionLink("PDF","DisplayReport", "Purchase", new {purchaseID=Model.PurchaseID },null)
+
+
+
+

@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PurchaseModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="PurchaseModelStoreContainer">
+          <EntitySet Name="Contact" EntityType="PurchaseModel.Store.Contact" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CustomerMast" EntityType="PurchaseModel.Store.CustomerMast" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProductMast" EntityType="PurchaseModel.Store.ProductMast" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PurchaseDetails" EntityType="PurchaseModel.Store.PurchaseDetails" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PurchaseMaster" EntityType="PurchaseModel.Store.PurchaseMaster" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_PurchaseDetails_ProductMast" Association="PurchaseModel.Store.FK_PurchaseDetails_ProductMast">
+            <End Role="ProductMast" EntitySet="ProductMast" />
+            <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseDetails_PurchaseMaster" Association="PurchaseModel.Store.FK_PurchaseDetails_PurchaseMaster">
+            <End Role="PurchaseMaster" EntitySet="PurchaseMaster" />
+            <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseMaster_CustomerMast" Association="PurchaseModel.Store.FK_PurchaseMaster_CustomerMast">
+            <End Role="CustomerMast" EntitySet="CustomerMast" />
+            <End Role="PurchaseMaster" EntitySet="PurchaseMaster" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="ContactID" />
+          </Key>
+          <Property Name="ContactID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ContactName" Type="nvarchar" Nullable="false" MaxLength="56" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CustomerMast">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Contact" Type="nvarchar" MaxLength="250" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="ProductMast">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductCode" Type="varbinary" MaxLength="50" />
+          <Property Name="CategoryID" Type="bigint" />
+          <Property Name="Rate" Type="numeric" Scale="2" />
+          <Property Name="ProductImage" Type="image" />
+        </EntityType>
+        <EntityType Name="PurchaseDetails">
+          <Key>
+            <PropertyRef Name="PurchaseDetailID" />
+          </Key>
+          <Property Name="PurchaseDetailID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseID" Type="bigint" />
+          <Property Name="ProductID" Type="bigint" />
+          <Property Name="Rate" Type="numeric" Scale="2" />
+          <Property Name="Qty" Type="int" />
+          <Property Name="Total" Type="numeric" Scale="2" />
+        </EntityType>
+        <EntityType Name="PurchaseMaster">
+          <Key>
+            <PropertyRef Name="PurchaseID" />
+          </Key>
+          <Property Name="PurchaseID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="10" />
+          <Property Name="PurchaseDate" Type="date" />
+          <Property Name="CustomerID" Type="bigint" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="Contact" Type="nvarchar" MaxLength="250" />
+          <Property Name="Total" Type="numeric" Scale="2" />
+          <Property Name="Vat" Type="numeric" Scale="2" />
+          <Property Name="Tax" Type="numeric" Scale="2" />
+          <Property Name="GrossTotal" Type="numeric" Scale="2" />
+          <Property Name="Discount" Type="numeric" Scale="2" />
+          <Property Name="NetTotal" Type="numeric" Scale="2" />
+        </EntityType>
+        <Association Name="FK_PurchaseDetails_ProductMast">
+          <End Role="ProductMast" Type="PurchaseModel.Store.ProductMast" Multiplicity="0..1" />
+          <End Role="PurchaseDetails" Type="PurchaseModel.Store.PurchaseDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductMast">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="PurchaseDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseDetails_PurchaseMaster">
+          <End Role="PurchaseMaster" Type="PurchaseModel.Store.PurchaseMaster" Multiplicity="0..1" />
+          <End Role="PurchaseDetails" Type="PurchaseModel.Store.PurchaseDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseMaster">
+              <PropertyRef Name="PurchaseID" />
+            </Principal>
+            <Dependent Role="PurchaseDetails">
+              <PropertyRef Name="PurchaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseMaster_CustomerMast">
+          <End Role="CustomerMast" Type="PurchaseModel.Store.CustomerMast" Multiplicity="0..1" />
+          <End Role="PurchaseMaster" Type="PurchaseModel.Store.PurchaseMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerMast">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="PurchaseMaster">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PurchaseModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PurchaseEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Contacts" EntityType="PurchaseModel.Contact" />
+          <EntitySet Name="CustomerMasts" EntityType="PurchaseModel.CustomerMast" />
+          <EntitySet Name="ProductMasts" EntityType="PurchaseModel.ProductMast" />
+          <EntitySet Name="PurchaseDetails" EntityType="PurchaseModel.PurchaseDetail" />
+          <EntitySet Name="PurchaseMasters" EntityType="PurchaseModel.PurchaseMaster" />
+          <AssociationSet Name="FK_PurchaseMaster_CustomerMast" Association="PurchaseModel.FK_PurchaseMaster_CustomerMast">
+            <End Role="CustomerMast" EntitySet="CustomerMasts" />
+            <End Role="PurchaseMaster" EntitySet="PurchaseMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseDetails_ProductMast" Association="PurchaseModel.FK_PurchaseDetails_ProductMast">
+            <End Role="ProductMast" EntitySet="ProductMasts" />
+            <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseDetails_PurchaseMaster" Association="PurchaseModel.FK_PurchaseDetails_PurchaseMaster">
+            <End Role="PurchaseMaster" EntitySet="PurchaseMasters" />
+            <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="ContactID" />
+          </Key>
+          <Property Name="ContactID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ContactName" Type="String" Nullable="false" MaxLength="56" Unicode="true" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="CustomerMast">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Contact" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="PurchaseMasters" Relationship="PurchaseModel.FK_PurchaseMaster_CustomerMast" FromRole="CustomerMast" ToRole="PurchaseMaster" />
+        </EntityType>
+        <EntityType Name="ProductMast">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ProductCode" Type="Binary" MaxLength="50" FixedLength="false" />
+          <Property Name="CategoryID" Type="Int64" />
+          <NavigationProperty Name="PurchaseDetails" Relationship="PurchaseModel.FK_PurchaseDetails_ProductMast" FromRole="ProductMast" ToRole="PurchaseDetails" />
+          <Property Type="Decimal" Name="Rate" Precision="18" Scale="2" />
+          <Property Type="Binary" Name="ProductImage" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="PurchaseDetail">
+          <Key>
+            <PropertyRef Name="PurchaseDetailID" />
+          </Key>
+          <Property Name="PurchaseDetailID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseID" Type="Int64" />
+          <Property Name="ProductID" Type="Int64" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Qty" Type="Int32" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="ProductMast" Relationship="PurchaseModel.FK_PurchaseDetails_ProductMast" FromRole="PurchaseDetails" ToRole="ProductMast" />
+          <NavigationProperty Name="PurchaseMaster" Relationship="PurchaseModel.FK_PurchaseDetails_PurchaseMaster" FromRole="PurchaseDetails" ToRole="PurchaseMaster" />
+        </EntityType>
+        <EntityType Name="PurchaseMaster">
+          <Key>
+            <PropertyRef Name="PurchaseID" />
+          </Key>
+          <Property Name="PurchaseID" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="PurchaseDate" Type="DateTime" Precision="0" />
+          <Property Name="CustomerID" Type="Int64" />
+          <Property Name="Address" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Contact" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Vat" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Tax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="GrossTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NetTotal" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="CustomerMast" Relationship="PurchaseModel.FK_PurchaseMaster_CustomerMast" FromRole="PurchaseMaster" ToRole="CustomerMast" />
+          <NavigationProperty Name="PurchaseDetails" Relationship="PurchaseModel.FK_PurchaseDetails_PurchaseMaster" FromRole="PurchaseMaster" ToRole="PurchaseDetails" />
+        </EntityType>
+        <Association Name="FK_PurchaseMaster_CustomerMast">
+          <End Role="CustomerMast" Type="PurchaseModel.CustomerMast" Multiplicity="0..1" />
+          <End Role="PurchaseMaster" Type="PurchaseModel.PurchaseMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerMast">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="PurchaseMaster">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseDetails_ProductMast">
+          <End Role="ProductMast" Type="PurchaseModel.ProductMast" Multiplicity="0..1" />
+          <End Role="PurchaseDetails" Type="PurchaseModel.PurchaseDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductMast">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="PurchaseDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseDetails_PurchaseMaster">
+          <End Role="PurchaseMaster" Type="PurchaseModel.PurchaseMaster" Multiplicity="0..1" />
+          <End Role="PurchaseDetails" Type="PurchaseModel.PurchaseDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseMaster">
+              <PropertyRef Name="PurchaseID" />
+            </Principal>
+            <Dependent Role="PurchaseDetails">
+              <PropertyRef Name="PurchaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PurchaseModelStoreContainer" CdmEntityContainer="PurchaseEntities">
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="PurchaseModel.Contact">
+              <MappingFragment StoreEntitySet="Contact">
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerMasts">
+            <EntityTypeMapping TypeName="PurchaseModel.CustomerMast">
+              <MappingFragment StoreEntitySet="CustomerMast">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductMasts">
+            <EntityTypeMapping TypeName="PurchaseModel.ProductMast">
+              <MappingFragment StoreEntitySet="ProductMast">
+                <ScalarProperty Name="ProductImage" ColumnName="ProductImage" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseDetails">
+            <EntityTypeMapping TypeName="IsTypeOf(PurchaseModel.PurchaseDetail)">
+              <MappingFragment StoreEntitySet="PurchaseDetails">
+                <ScalarProperty Name="PurchaseDetailID" ColumnName="PurchaseDetailID" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseMasters">
+            <EntityTypeMapping TypeName="PurchaseModel.PurchaseMaster">
+              <MappingFragment StoreEntitySet="PurchaseMaster">
+                <ScalarProperty Name="PurchaseID" ColumnName="PurchaseID" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Vat" ColumnName="Vat" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="GrossTotal" ColumnName="GrossTotal" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

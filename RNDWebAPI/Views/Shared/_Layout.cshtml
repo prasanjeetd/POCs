@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="~/Bootstrap/images/favicon.ico">
+
+    <title>Justified Nav Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    @Styles.Render("~/Bootstrap/css/bootstrap.min.css")
+
+    <!-- Custom styles for this template -->
+    @Styles.Render("~/Bootstrap/css/Assets/justified-nav.css")
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    @Scripts.Render("~/Bootstrap/js/Assets/ie-emulation-modes-warning.js")
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    @Styles.Render("~/Scripts/KendoLibrary/styles/kendo.common.min.css")
+    @Styles.Render("~/Scripts/KendoLibrary/styles/kendo.default.min.css")
+
+    @Styles.Render("http://cdn.kendostatic.com/2014.3.1411/styles/kendo.common.min.css")
+    
+
+    @Scripts.Render("~/Scripts/KendoLibrary/js/jquery.min.js")
+    @Scripts.Render("~/Scripts/KendoComponents/Commom/TemplateLoader.js")
+    @Scripts.Render("~/Scripts/KendoLibrary/js/kendo.all.min.js")
+
+    @*@Scripts.Render("http://cdn.kendostatic.com/2014.3.1411/js/kendo.all.min.js")*@
+
+
+    <div class="container">
+
+        <div class="masthead">
+            <h3 class="text-muted">Kendo Demo</h3>
+            <nav>
+                <ul class="nav nav-justified">
+                    <li class="active"><a href="#">Kendo</a></li>
+                    @*<li><a href="#"></a></li>*@
+                    @*<li><a href="#">Services</a></li>
+                    <li><a href="#">Downloads</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>*@
+                </ul>
+            </nav>
+        </div>
+
+        @RenderBody()
+
+        <!-- Site footer -->
+        <footer class="footer">
+            <p>&copy; Prasanjeet Debanth</p>
+        </footer>
+
+    </div>
+    <!-- /container -->
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    @Scripts.Render("~/Bootstrap/js/Assets/ie10-viewport-bug-workaround.js")
+    @RenderSection("kendoScripts", required: false)
+
+
+</body>
+</html>

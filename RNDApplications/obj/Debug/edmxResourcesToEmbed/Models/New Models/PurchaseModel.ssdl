@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PurchaseModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="PurchaseModelStoreContainer">
+    <EntitySet Name="Contact" EntityType="PurchaseModel.Store.Contact" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CustomerMast" EntityType="PurchaseModel.Store.CustomerMast" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductMast" EntityType="PurchaseModel.Store.ProductMast" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PurchaseDetails" EntityType="PurchaseModel.Store.PurchaseDetails" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PurchaseMaster" EntityType="PurchaseModel.Store.PurchaseMaster" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_PurchaseDetails_ProductMast" Association="PurchaseModel.Store.FK_PurchaseDetails_ProductMast">
+      <End Role="ProductMast" EntitySet="ProductMast" />
+      <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseDetails_PurchaseMaster" Association="PurchaseModel.Store.FK_PurchaseDetails_PurchaseMaster">
+      <End Role="PurchaseMaster" EntitySet="PurchaseMaster" />
+      <End Role="PurchaseDetails" EntitySet="PurchaseDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseMaster_CustomerMast" Association="PurchaseModel.Store.FK_PurchaseMaster_CustomerMast">
+      <End Role="CustomerMast" EntitySet="CustomerMast" />
+      <End Role="PurchaseMaster" EntitySet="PurchaseMaster" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Contact">
+    <Key>
+      <PropertyRef Name="ContactID" />
+    </Key>
+    <Property Name="ContactID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ContactName" Type="nvarchar" Nullable="false" MaxLength="56" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="CustomerMast">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+    <Property Name="Contact" Type="nvarchar" MaxLength="250" />
+    <Property Name="Address" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="ProductMast">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProductCode" Type="varbinary" MaxLength="50" />
+    <Property Name="CategoryID" Type="bigint" />
+    <Property Name="Rate" Type="numeric" Scale="2" />
+    <Property Name="ProductImage" Type="image" />
+  </EntityType>
+  <EntityType Name="PurchaseDetails">
+    <Key>
+      <PropertyRef Name="PurchaseDetailID" />
+    </Key>
+    <Property Name="PurchaseDetailID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="PurchaseID" Type="bigint" />
+    <Property Name="ProductID" Type="bigint" />
+    <Property Name="Rate" Type="numeric" Scale="2" />
+    <Property Name="Qty" Type="int" />
+    <Property Name="Total" Type="numeric" Scale="2" />
+  </EntityType>
+  <EntityType Name="PurchaseMaster">
+    <Key>
+      <PropertyRef Name="PurchaseID" />
+    </Key>
+    <Property Name="PurchaseID" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="10" />
+    <Property Name="PurchaseDate" Type="date" />
+    <Property Name="CustomerID" Type="bigint" />
+    <Property Name="Address" Type="nvarchar" MaxLength="250" />
+    <Property Name="Contact" Type="nvarchar" MaxLength="250" />
+    <Property Name="Total" Type="numeric" Scale="2" />
+    <Property Name="Vat" Type="numeric" Scale="2" />
+    <Property Name="Tax" Type="numeric" Scale="2" />
+    <Property Name="GrossTotal" Type="numeric" Scale="2" />
+    <Property Name="Discount" Type="numeric" Scale="2" />
+    <Property Name="NetTotal" Type="numeric" Scale="2" />
+  </EntityType>
+  <Association Name="FK_PurchaseDetails_ProductMast">
+    <End Role="ProductMast" Type="PurchaseModel.Store.ProductMast" Multiplicity="0..1" />
+    <End Role="PurchaseDetails" Type="PurchaseModel.Store.PurchaseDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductMast">
+        <PropertyRef Name="ProductID" />
+      </Principal>
+      <Dependent Role="PurchaseDetails">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseDetails_PurchaseMaster">
+    <End Role="PurchaseMaster" Type="PurchaseModel.Store.PurchaseMaster" Multiplicity="0..1" />
+    <End Role="PurchaseDetails" Type="PurchaseModel.Store.PurchaseDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseMaster">
+        <PropertyRef Name="PurchaseID" />
+      </Principal>
+      <Dependent Role="PurchaseDetails">
+        <PropertyRef Name="PurchaseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseMaster_CustomerMast">
+    <End Role="CustomerMast" Type="PurchaseModel.Store.CustomerMast" Multiplicity="0..1" />
+    <End Role="PurchaseMaster" Type="PurchaseModel.Store.PurchaseMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CustomerMast">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="PurchaseMaster">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
