@@ -16,7 +16,7 @@ namespace RNDWebAPI
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}",
-                defaults: new { controller = "Kendo", action = "Index"}
+                defaults: new { controller = "Kendo", action = "Index" }
             );
         }
     }

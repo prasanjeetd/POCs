@@ -6,14 +6,14 @@
                     <div
                         data-role="grid"
                         date-scrollable="true"                       
-                         data-editable='{ "mode": "popup","template": kendo.template($("#popup_editor").html()) }' 
+                         data-editable='{ "mode": "popup" }' 
                          data-toolbar="['create', 'save']"
                         data-columns="[
                                          { 'field': 'ProductName', 'width': 270 },
                                          { 'field': 'UnitPrice' },
                                          {'command':['edit','destroy'],'title':'Alter'},
                                       ]"
-                         data-row-template="rowTemplate"
+                      
                          data-bind="source: products,
                                 events: {
                                     save: onSave

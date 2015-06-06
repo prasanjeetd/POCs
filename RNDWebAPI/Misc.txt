@@ -7,4 +7,4 @@
   <a class="k-button k-button-icontext k-grid-edit" href="javascript:void(0)" ><span class="k-icon k-edit"></span>Edit T</a>
 
   data-editable='{ "mode": "popup","template": kendo.template($("#popup_editor").html()) }' 
-  data-row-template="rowTemplate"
+ 

@@ -15,5 +15,12 @@ namespace RNDWebAPI.Controllers
             return View();
         }
 
+        public ActionResult ITWStructure()
+        {
+
+            return View();
+        }
+
+
     }
 }

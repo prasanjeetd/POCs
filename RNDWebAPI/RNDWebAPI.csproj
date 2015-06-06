@@ -1140,6 +1140,7 @@
     <Content Include="Scripts\KendoLibrary\styles\images\kendoui.woff" />
     <Content Include="Views\Kendo\Index.cshtml" />
     <Content Include="Views\Kendo\PageHeading.cshtml" />
+    <Content Include="Views\Kendo\ITWStructure.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
